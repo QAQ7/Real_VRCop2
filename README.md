@@ -11,47 +11,6 @@ Virtua Cop 2 VR — 在 Meta Quest 3 上运行的《VR 战警 2》移植版本�
 **感谢 jacquesdupontd 提供了优秀的 VR 移植框架和底层实现。** 本项目的改造建立在
 Port0r 的工作之上。原项目的许可证信息保留在 [LICENSE](LICENSE) 的致谢部分。
 
-## 改动内容
-
-在 Port0r Cop VR v0.2.3 基础上做了以下修改：
-
-### 1. 默认驱动从 vcop 改为 vcop2
-
-通过反汇编 `libhello_xr.so`，修改了 `arcadexr::packs` 的默认游戏配置：
-
-- `packs::DefaultGame()` 的返回值从 `"vcop"` 改为 `"vcop2"`
-- pack 模板的 driver 字段同步更新
-- 两者通过一处字符串覆写（`"discord.name"` → `"vcop2"`）保持一致
-
-### 2. 设备 ROM 映射修正
-
-原项目把 `segabill`（Model 2 的 Billboard 控制板固件）映射为
-`model1io2`（Model 1 的 I/O 板），导致启动时提示缺少 `model1io2`。
-已修正为直接返回 `"segabill"`。
-
-### 3. ROM 自动导入
-
-在 `TcvrActivity.smali` 中新增了 `copyAsset()` 方法，
-使 ROM 可以从 APK 的 `assets/roms/` 自动复制到应用私有目录，
-免去手动 `adb push` 的步骤。
-
-### 4. APK 打包修复
-
-- `extractNativeLibs` 设为 `false`（与原项目一致）
-- 使用 `zipalign -p 4096` 对 native 库做 4KB 页对齐
-- `resources.arsc` 改为 STORED 并 4 字节对齐（Android 11+ 要求）
-- 补齐 `versionCode` / `versionName` / `minSdkVersion` / `targetSdkVersion`
-- 修正 R 类资源 ID 与资源表的不匹配
-- 重新签名（v1/v2/v3）
-
-## 运行需求
-
-| 项目 | 版本 |
-| --- | --- |
-| 设备 | Meta Quest 3 |
-| Android | 10 (API 29) 及以上 |
-| ROM | `vcop2.zip`（MAME 0.289 版）+ `segabill.zip` |
-
 ROM 文件**不包含在本仓库中**（版权原因）。请自行准备后放入 `roms/` 目录。
 
 ## 安装
