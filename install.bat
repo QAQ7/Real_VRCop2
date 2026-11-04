@@ -30,7 +30,9 @@ if errorlevel 1 (
     exit /b 1
 )
 "%ADB%" devices | findstr /V "List of devices"
+echo [OK] Device found.
 echo.
+pause
 
 REM ---------- Install APK ----------
 set "APK=%~dp0vcop2vr.apk"
@@ -53,6 +55,7 @@ if errorlevel 1 (
 )
 echo [OK] Installed.
 echo.
+pause
 
 REM ---------- Push ROM ----------
 set "ROMDIR=%~dp0roms"
@@ -72,14 +75,16 @@ for %%F in ("%ROMDIR%\*.zip") do (
 )
 echo [OK] ROM pushed.
 echo.
+pause
 
 REM ---------- Grant permissions ----------
 echo [INFO] Granting storage permissions...
 "%ADB%" shell pm grant io.vcop2vr android.permission.WRITE_EXTERNAL_STORAGE 2>/dev/null
 "%ADB%" shell pm grant io.vcop2vr android.permission.READ_EXTERNAL_STORAGE 2>/dev/null
+echo [OK] Permissions granted.
 echo.
 
 echo ============================================================
-echo  Done! Open "Virtua Cop 2 VR" on your Quest 3 to play.
+echo  All done! Open "Virtua Cop 2 VR" on your Quest 3 to play.
 echo ============================================================
 pause
